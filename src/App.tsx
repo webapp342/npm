@@ -1,34 +1,42 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createAppKit } from '@reown/appkit/react'
 
-function App() {
-  const [count, setCount] = useState(0)
+import { WagmiProvider } from 'wagmi'
+
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ActionButtonList } from './components/ActionButtonList'
+import { InfoList } from './components/InfoList'
+import { projectId, metadata, networks, wagmiAdapter } from './config'
+
+import "./App.css"
+
+const queryClient = new QueryClient()
+
+const generalConfig = {
+  projectId,
+  metadata,
+  networks
+}
+
+// Create modal
+createAppKit({
+  adapters: [wagmiAdapter],
+  ...generalConfig,
+})
+
+export function App() {
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div className={"pages"}>
+      <img src="/reown.svg" alt="Reown" style={{ width: '150px', height: '150px' }} />
+      <h1>AppKit Wagmi React dApp Example</h1>
+      <WagmiProvider config={wagmiAdapter.wagmiConfig}>
+        <QueryClientProvider client={queryClient}>
+            <appkit-button />
+            <ActionButtonList />
+            <InfoList />
+        </QueryClientProvider>
+      </WagmiProvider>
+    </div>
   )
 }
 
